@@ -1,0 +1,25 @@
+{
+  "id": "traditional-phin-brewing",
+  "slug": "traditional-phin-brewing",
+  "status": "published",
+  "title": "Nghệ thuật pha cà phê Phin truyền thống: Chọn nhôm phin & canh nhiệt độ nước",
+  "excerpt": "Tại sao chiếc phin nhôm truyền thống lại tạo ra hương vị cà phê đậm đà khó cưỡng? Hướng dẫn từng bước ủ cà phê chuẩn nghệ nhân.",
+  "seoTitle": "Nghệ thuật pha cà phê Phin truyền thống: Chọn nhôm phin & canh nhiệt độ nước",
+  "seoDescription": "Tại sao chiếc phin nhôm truyền thống lại tạo ra hương vị cà phê đậm đà khó cưỡng? Hướng dẫn từng bước ủ cà phê chuẩn nghệ nhân.",
+  "canonicalPath": "/blogs/traditional-phin-brewing",
+  "category": "brewing",
+  "categoryName": "Brewing Guides",
+  "publishedAt": "2026-07-28",
+  "updatedAt": "2026-07-28",
+  "coverImage": "/assets/images/learn-phin-coffee.avif",
+  "coverAlt": "Nghệ thuật pha cà phê Phin truyền thống: Chọn nhôm phin & canh nhiệt độ nước",
+  "readingTime": "7 min read",
+  "featured": false,
+  "tags": [
+    "Phin Filter",
+    "Traditional",
+    "Coffee Basics"
+  ],
+  "tiptapJson": null,
+  "html": "\n        <p class=\"text-stone-700 text-base sm:text-lg leading-relaxed mb-6\">\n          Chiếc Phin nhôm nhỏ nhắn từ lâu đã là hình ảnh biểu tượng gắn liền với đời sống tâm hồn của người Việt Nam. Khác với cách pha cà phê máy espresso nhanh vội, pha phin là một hành trình chiêm nghiệm nhịp sống chậm rãi, nơi từng giọt cà phê tí tách rơi mang theo hương thơm ngạt ngào.\n        </p>\n\n        <h2 class=\"text-xl sm:text-2xl font-serif font-bold text-stone-800 mt-10 mb-4 pb-2 border-b border-stone-200\">1. Tại Sao Phin Nhôm Luôn Được Giới Nghệ Nhân Ưa Chuộng?</h2>\n        <p class=\"text-stone-700 text-base leading-relaxed mb-4\">\n          Trên thị trường hiện nay có nhiều loại phin như inox, gốm sứ hay thủy tinh. Tuy nhiên, phin nhôm truyền thống vẫn luôn là sự lựa chọn hàng đầu của các Barista chuyên nghiệp vì những ưu điểm vượt trội:\n        </p>\n\n        <ul class=\"list-disc pl-6 space-y-2.5 text-stone-700 mb-6\">\n          <li><strong>Dẫn và giữ nhiệt tối ưu:</strong> Nhôm có hệ số dẫn nhiệt cao, giúp hấp thụ và phân bổ nhiệt độ nước sôi đều khắp thân phin trong suốt quá trình ủ.</li>\n          <li><strong>Lỗ đục đáy phin đều đặn:</strong> Phin nhôm được đục lỗ thủng nhỏ li ti với mật độ đồng đều, giúp dòng chảy róc giọt với tốc độ ổn định 45-60 giọt/phút.</li>\n          <li><strong>Bền bỉ & nhẹ nhàng:</strong> Dễ mang theo trong các chuyến du lịch và không lo rơi vỡ.</li>\n        </ul>\n\n        <div class=\"my-8 overflow-hidden\">\n          <img src=\"/assets/images/learn-phin-coffee.avif\" alt=\"Cà phê Phin nhôm truyền thống Việt Nam\" class=\"w-full h-auto object-cover rounded-none shadow-sm mb-2 blog-content-image\" />\n          <p class=\"text-xs text-center text-stone-500 italic\">Dòng cà phê phin róc chậm sánh đậm chiết xuất trọn vẹn hương vị Robusta.</p>\n        </div>\n\n        <h2 class=\"text-xl sm:text-2xl font-serif font-bold text-stone-800 mt-10 mb-4 pb-2 border-b border-stone-200\">2. Kỹ Thuật Nước & Nhiệt Độ Ủ Chuẩn Xác</h2>\n        <p class=\"text-stone-700 text-base leading-relaxed mb-4\">\n          Nhiệt độ nước là chìa khóa vàng quyết định độ đắng, độ chua và mùi thơm của ly cà phê:\n        </p>\n\n        <div class=\"py-4 border-y border-stone-200 mb-6\">\n          <h3 class=\"font-bold text-stone-800 mb-2 text-base sm:text-lg\">Quy Tắc Vàng Khi Pha Phin:</h3>\n          <ul class=\"space-y-2 text-stone-700 text-sm sm:text-base\">\n            <li>• <strong>Bột cà phê:</strong> 25g bột Robusta xay thô vừa (tương đương kích thước hạt muối biển).</li>\n            <li>• <strong>Nhiệt độ nước:</strong> 92°C - 95°C (nước đun sôi để nguội khoảng 40 giây).</li>\n            <li>• <strong>Tổng lượng nước:</strong> 90ml (30ml nước ủ + 60ml nước chiết xuất).</li>\n          </ul>\n        </div>\n      "
+}

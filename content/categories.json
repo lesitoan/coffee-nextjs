@@ -1,0 +1,27 @@
+[
+  {
+    "id": "all",
+    "label": "All Stories",
+    "icon": "fa-solid fa-border-all"
+  },
+  {
+    "id": "brewing",
+    "label": "Brewing Guides",
+    "icon": "fa-solid fa-mug-hot"
+  },
+  {
+    "id": "culture",
+    "label": "Coffee Culture",
+    "icon": "fa-solid fa-heart"
+  },
+  {
+    "id": "beans",
+    "label": "Beans & Craft",
+    "icon": "fa-solid fa-seedling"
+  },
+  {
+    "id": "events",
+    "label": "News & Events",
+    "icon": "fa-solid fa-newspaper"
+  }
+]

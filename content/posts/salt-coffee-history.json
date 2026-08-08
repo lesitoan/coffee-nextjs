@@ -1,0 +1,25 @@
+{
+  "id": "salt-coffee-history",
+  "slug": "salt-coffee-history",
+  "status": "published",
+  "title": "Nguồn gốc Cà Phê Muối Xứ Huế: Sự kết hợp vị mặn béo độc đáo",
+  "excerpt": "Cà phê muối không chỉ là xu hướng mà còn là nét sáng tạo độc đáo của người miền Trung. Hãy cùng tìm hiểu lý do chút vị mặn lại tôn lên vị ngọt của cà phê.",
+  "seoTitle": "Nguồn gốc Cà Phê Muối Xứ Huế: Sự kết hợp vị mặn béo độc đáo",
+  "seoDescription": "Cà phê muối không chỉ là xu hướng mà còn là nét sáng tạo độc đáo của người miền Trung. Hãy cùng tìm hiểu lý do chút vị mặn lại tôn lên vị ngọt của cà phê.",
+  "canonicalPath": "/blogs/salt-coffee-history",
+  "category": "culture",
+  "categoryName": "Coffee Culture",
+  "publishedAt": "2026-07-22",
+  "updatedAt": "2026-07-22",
+  "coverImage": "/assets/images/learn-salt-coffee.avif",
+  "coverAlt": "Nguồn gốc Cà Phê Muối Xứ Huế: Sự kết hợp vị mặn béo độc đáo",
+  "readingTime": "6 min read",
+  "featured": false,
+  "tags": [
+    "Salt Coffee",
+    "Central Vietnam",
+    "History"
+  ],
+  "tiptapJson": null,
+  "html": "\n        <p class=\"text-stone-700 text-base sm:text-lg leading-relaxed mb-6\">\n          Xuất phát từ một quán cà phê nhỏ ẩn mình trên con phố Nguyễn Lương Bằng yên tĩnh ở Cố đô Huế vào năm 2010, thức uống Cà Phê Muối đã nhanh chóng tạo nên một làn sóng ẩm thực lan rộng khắp Đà Nẵng, TP.HCM và toàn quốc.\n        </p>\n\n        <h2 class=\"text-xl sm:text-2xl font-serif font-bold text-stone-800 mt-10 mb-4 pb-2 border-b border-stone-200\">1. Lý Giải Hóa Học: Vì Sao Muối Lại Tôn Vị Ngọt Của Cà Phê?</h2>\n        <p class=\"text-stone-700 text-base leading-relaxed mb-4\">\n          Ý tưởng thêm muối vào cà phê nghe có vẻ lạ lẫm, nhưng lại dựa trên nguyên lý khoa học vị giác rất thú vị. Ion Natri trong muối biển có khả năng làm ức chế các thụ thể nhận biết vị đắng trên lưỡi con người.\n        </p>\n\n        <div class=\"my-8 overflow-hidden\">\n          <img src=\"/assets/images/learn-salt-coffee.avif\" alt=\"Cà phê muối đậm đà miền Trung\" class=\"w-full h-auto object-cover rounded-none shadow-sm mb-2 blog-content-image\" />\n          <p class=\"text-xs text-center text-stone-500 italic\">Ly cà phê muối với lớp kem mặn béo ngậy sóng sánh trên nền cà phê phin đậm đà.</p>\n        </div>\n      "
+}

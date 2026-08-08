@@ -1,0 +1,25 @@
+{
+  "id": "coconut-coffee-refreshing",
+  "slug": "coconut-coffee-refreshing",
+  "status": "published",
+  "title": "Cà Phê Cốt Dừa Đá Xay: Thức uống giải nhiệt mùa hè số 1 tại Đà Nẵng",
+  "excerpt": "Sự hòa quyện giữa nước cốt dừa béo ngậy đá xay tuyết và dòng cà phê phin sánh đậm mang lại trải nghiệm tươi mát khó quên.",
+  "seoTitle": "Cà Phê Cốt Dừa Đá Xay: Thức uống giải nhiệt mùa hè số 1 tại Đà Nẵng",
+  "seoDescription": "Sự hòa quyện giữa nước cốt dừa béo ngậy đá xay tuyết và dòng cà phê phin sánh đậm mang lại trải nghiệm tươi mát khó quên.",
+  "canonicalPath": "/blogs/coconut-coffee-refreshing",
+  "category": "brewing",
+  "categoryName": "Brewing Guides",
+  "publishedAt": "2026-07-15",
+  "updatedAt": "2026-07-15",
+  "coverImage": "/assets/images/learn-coconut-coffee-blended.avif",
+  "coverAlt": "Cà Phê Cốt Dừa Đá Xay: Thức uống giải nhiệt mùa hè số 1 tại Đà Nẵng",
+  "readingTime": "5 min read",
+  "featured": false,
+  "tags": [
+    "Coconut Coffee",
+    "Tropical",
+    "Summer Recipe"
+  ],
+  "tiptapJson": null,
+  "html": "\n        <p class=\"text-stone-700 text-base sm:text-lg leading-relaxed mb-6\">\n          Dưới cái nắng nhiệt đới rực rỡ của thành phố biển Đà Nẵng, một ly cà phê cốt dừa đá xay tuyết là sự kết hợp tuyệt vời giữa hương vị đậm đà và sự mát lạnh sảng khoái.\n        </p>\n\n        <div class=\"my-8 overflow-hidden\">\n          <img src=\"/assets/images/learn-coconut-coffee-blended.avif\" alt=\"Cà phê cốt dừa đá xay mát lạnh\" class=\"w-full h-auto object-cover rounded-none shadow-sm mb-2 blog-content-image\" />\n          <p class=\"text-xs text-center text-stone-500 italic\">Cà phê cốt dừa đá xay tuyết chuẩn vị nhiệt đới tại Classic Coffee Class.</p>\n        </div>\n      "
+}

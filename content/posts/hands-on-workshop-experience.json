@@ -1,0 +1,25 @@
+{
+  "id": "hands-on-workshop-experience",
+  "slug": "hands-on-workshop-experience",
+  "status": "published",
+  "title": "Trải nghiệm 90 phút làm Barista thực thụ tại Classic Coffee Class Đà Nẵng",
+  "excerpt": "Nhật ký một buổi học pha chế ấm cúng dành cho du khách trong và ngoài nước. Tự tay chuẩn bị nguyên liệu và thưởng thức thành phẩm.",
+  "seoTitle": "Trải nghiệm 90 phút làm Barista thực thụ tại Classic Coffee Class Đà Nẵng",
+  "seoDescription": "Nhật ký một buổi học pha chế ấm cúng dành cho du khách trong và ngoài nước. Tự tay chuẩn bị nguyên liệu và thưởng thức thành phẩm.",
+  "canonicalPath": "/blogs/hands-on-workshop-experience",
+  "category": "events",
+  "categoryName": "News & Events",
+  "publishedAt": "2026-07-01",
+  "updatedAt": "2026-07-01",
+  "coverImage": "/assets/images/about-workshop.avif",
+  "coverAlt": "Trải nghiệm 90 phút làm Barista thực thụ tại Classic Coffee Class Đà Nẵng",
+  "readingTime": "5 min read",
+  "featured": false,
+  "tags": [
+    "Workshop",
+    "Da Nang Class",
+    "Student Story"
+  ],
+  "tiptapJson": null,
+  "html": "\n        <p class=\"text-stone-700 text-base sm:text-lg leading-relaxed mb-6\">\n          Hơn cả một khóa học thông thường, Classic Coffee Class mang đến không gian giao lưu văn hóa ấm áp, nơi bạn tự tay pha chế 4 món cà phê kinh điển của Việt Nam dưới sự hướng dẫn tận tình của các Barista kinh nghiệm.\n        </p>\n\n        <div class=\"my-8 overflow-hidden\">\n          <img src=\"/assets/images/about-workshop.avif\" alt=\"Không gian workshop pha chế cà phê ấm cúng\" class=\"w-full h-auto object-cover rounded-none shadow-sm mb-2 blog-content-image\" />\n          <p class=\"text-xs text-center text-stone-500 italic\">Không gian lớp học ấm cúng với đầy đủ dụng cụ pha chế thủ công chuyên nghiệp.</p>\n        </div>\n      "
+}

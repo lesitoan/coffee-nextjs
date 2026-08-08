@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "Classic Coffee Class | Authentic Vietnamese Coffee Experience",
+    "description": "Hands-on Vietnamese coffee class in Da Nang. Learn traditional phin, egg, salted, and coconut coffee."
+  },
+  "brand": {
+    "name": "Classic Coffee Class",
+    "fullName": "Classic Coffee Class",
+    "logoIcon": "fa-solid fa-mug-hot",
+    "logoImage": "/assets/images/logo.png"
+  },
+  "navigation": [
+    {
+      "label": "About Us",
+      "href": "/#about",
+      "collapseAtTablet": true
+    },
+    {
+      "label": "The Class",
+      "href": "/#class",
+      "collapseAtTablet": true
+    },
+    {
+      "label": "Why Choose Us",
+      "href": "/#why-us"
+    },
+    {
+      "label": "Location",
+      "href": "/#location"
+    },
+    {
+      "label": "Blogs",
+      "href": "/blogs/"
+    },
+    {
+      "label": "Histories",
+      "href": "/histories/"
+    },
+    {
+      "label": "Book Now",
+      "href": "/book/",
+      "variant": "primary"
+    }
+  ],
+  "hero": {
+    "eyebrow": "100% Authentic Vietnamese Flavor",
+    "title": "Coffee Class in Da Nang Learn to Make 4 Authentic Coffees",
+    "titleLines": [
+      "Coffee Class in Da Nang",
+      "Learn to Make 4 Coffees"
+    ],
+    "description": "Immerse yourself in a cozy local atmosphere. Ditch the machines and use your hands to brew iconic Vietnamese coffee masterpieces at Classic Coffee Class.",
+    "primaryCta": {
+      "label": "Join the Experience",
+      "href": "#booking"
+    },
+    "secondaryCta": {
+      "label": "Explore the Menu",
+      "href": "#class"
+    },
+    "backgroundImage": "/assets/images/hero-background.avif"
+  },
+  "about": {
+    "eyebrow": "Our Story",
+    "title": "The Story of Classic Coffee Class",
+    "paragraphs": [
+      "Welcome to Classic Coffee Class, a place where the rich heritage of Vietnamese coffee culture is preserved and shared. We believe that a great cup of coffee is not just about taste; it is about the cultural story behind every drop.",
+      "Forget modern espresso machines. Our workshop offers a 100% handcrafted experience. From setting up the traditional aluminum phin filter to whisking milk and eggs, everything is done with your own hands under the guidance of friendly local baristas."
+    ],
+    "stats": [
+      {
+        "value": "100%",
+        "label": "Handcrafted"
+      },
+      {
+        "value": "4",
+        "label": "Iconic Drinks"
+      },
+      {
+        "value": "90 mins",
+        "label": "Duration"
+      }
+    ],
+    "image": {
+      "url": "/assets/images/about-workshop.avif",
+      "alt": "Coffee brewing workshop"
+    },
+    "quote": "It is more than just a brewing class; it is a journey into the soul of Vietnam."
+  },
+  "classSection": {
+    "eyebrow": "",
+    "title": "What You Will Learn",
+    "description": "In this 90-minute hands-on workshop, you will discover the history of Vietnamese coffee and learn how to make Vietnam's most famous coffee masterpieces.",
+    "drinks": [
+      {
+        "icon": "fa-solid fa-filter",
+        "title": "Traditional Phin Coffee",
+        "image": "/assets/images/learn-phin-coffee.avif"
+      },
+      {
+        "icon": "fa-solid fa-egg",
+        "title": "Egg Coffee",
+        "image": "/assets/images/learn-egg-coffee.avif"
+      },
+      {
+        "icon": "fa-solid fa-droplet",
+        "title": "Salt Coffee",
+        "image": "/assets/images/learn-salt-coffee.avif"
+      },
+      {
+        "icon": "fa-solid fa-mug-saucer",
+        "title": "Coconut Coffee",
+        "image": "/assets/images/learn-coconut-coffee-blended.avif"
+      }
+    ],
+    "scheduleTitle": "Daily Class Times (90 Mins)",
+    "scheduleDescription": "We run 4 fixed sessions daily. Booking in advance is highly recommended to secure your slot.",
+    "capacityLabel": "Class Capacity",
+    "capacityValue": "Max 7 Guests",
+    "capacityDescription": "To ensure personal, hands-on guidance"
+  },
+  "whyUs": {
+    "eyebrow": "",
+    "title": "Why Choose Us?",
+    "images": [
+      {
+        "url": "/assets/images/why-us-premium-coffee.avif",
+        "alt": "Coffee beans"
+      },
+      {
+        "url": "/assets/images/why-us-barista.avif",
+        "alt": "Barista preparing coffee"
+      }
+    ],
+    "reasons": [
+      {
+        "icon": "fa-solid fa-leaf",
+        "title": "Premium Vietnamese Coffee",
+        "description": "Brew with carefully selected Vietnamese coffee for an authentic local experience."
+      },
+      {
+        "icon": "fa-solid fa-users",
+        "title": "Fun & Hands-On",
+        "description": "Learn to make iconic Vietnamese coffee drinks in a simple and enjoyable way."
+      },
+      {
+        "icon": "fa-solid fa-user-group",
+        "title": "Small Groups Only",
+        "description": "Limited to just 7 guests per class for more personal attention and a better learning experience."
+      },
+      {
+        "icon": "fa-solid fa-cookie-bite",
+        "title": "Local Flavors",
+        "description": "Enjoy delicious coffee creations and local treats while discovering Vietnamese culture."
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Hear From Our Guests",
+    "description": "Join hundreds of happy travelers who have mastered Vietnamese coffee.",
+    "backgroundImage": "/assets/images/testimonials-background.avif"
+  },
+  "location": {
+    "title": "Visit Our Coffee Class",
+    "description": "Find us in Da Nang and enjoy a cozy local brewing space close to My Khe beach.",
+    "address": "K211/77 Nguyễn Văn Thoại, An Hải, Đà Nẵng",
+    "phone": "0798281790",
+    "whatsapp": "0905862808",
+    "showWhatsapp": true,
+    "whatsapp2": "0798281790",
+    "showWhatsapp2": true,
+    "email": "classiccoffeeclass@gmail.com",
+    "emailUrl": "https://mail.google.com/mail/?view=cm&fs=1&to=classiccoffeeclass@gmail.com",
+    "instagram": "@classiccoffee.class",
+    "instagramUrl": "https://www.instagram.com/classiccoffee.class?igsh=MWM2dGs3ODZqd3A3MA==",
+    "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3899.0420855306857!2d108.2432211!3d16.058158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142178c1832e965%3A0x2bb7b1f12e58d790!2sClassic%20Coffee%20Class!5e1!3m2!1svi!2s!4v1780300510620!5m2!1svi!2s",
+    "mapDirectionUrl": "https://maps.app.goo.gl/s6engaQRzCNNccHj9",
+    "whatsappUrl": "https://wa.me/84905862808",
+    "whatsapp2Url": "https://wa.me/84798281790"
+  },
+  "booking": {
+    "title": "Choose Your Coffee Experience",
+    "description": "Select a package to continue to the booking page. You can still change your package before submitting the form.",
+    "formTitle": "Send your booking request",
+    "formDescription": "",
+    "historyStorageKey": "classicCoffeeBookings",
+    "googleSheetsEndpoint": "https://script.google.com/macros/s/AKfycbzZCAuhyoB3qP-X2GU9E7dIZcTwxZRSTlpnMHvMArMRoQaUxySSa-n0vdbHlojezYZegg/exec",
+    "packages": [
+      {
+        "id": "standard",
+        "name": "Standard Class",
+        "price": "$18",
+        "unit": "/ person",
+        "badge": "Most popular",
+        "description": "Standard class: Join our daily coffee workshop and discover the art of Vietnamese coffee alongside other travelers. Maximum 7 guests per class.",
+        "features": [],
+        "image": "/assets/images/booking-standard-class.avif",
+        "defaultGuests": 1
+      },
+      {
+        "id": "private",
+        "name": "Private Class",
+        "price": "$25",
+        "unit": "/ person",
+        "badge": "Flexible",
+        "description": "Private class: Private and flexible experience for couples, families, or friends, with each extra guest charged at $17. Maximum group size: 7 people.",
+        "features": [],
+        "image": "/assets/images/booking-private-class.avif",
+        "defaultGuests": 4
+      }
+    ],
+    "sessions": [
+      "08:00 AM",
+      "10:30 AM",
+      "01:00 PM",
+      "03:30 PM"
+    ],
+    "guestOptions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "submitLabels": {
+      "idle": "Send Booking Request",
+      "submitting": "Sending...",
+      "success": "Thank you. Your booking request has been sent.",
+      "missingEndpoint": "Google Sheets endpoint is not configured yet.",
+      "error": "We could not send your booking. Please try again or contact us directly."
+    }
+  },
+  "footer": {
+    "description": "Delivering a 100% handcrafted coffee brewing experience while preserving the true essence of Vietnamese culture.",
+    "copyright": "© 2026 Classic Coffee Class. All rights reserved.",
+    "socialLinks": [
+      {
+        "label": "Gmail",
+        "icon": "fa-solid fa-envelope",
+        "url": "https://mail.google.com/mail/?view=cm&fs=1&to=classiccoffeeclass@gmail.com"
+      },
+      {
+        "label": "WhatsApp",
+        "icon": "fa-solid fa-phone",
+        "type": "whatsapp"
+      },
+      {
+        "label": "Instagram",
+        "icon": "fa-brands fa-instagram",
+        "url": "https://www.instagram.com/classiccoffee.class?igsh=MWM2dGs3ODZqd3A3MA=="
+      },
+      {
+        "label": "Directions",
+        "icon": "fa-solid fa-location-dot",
+        "url": "https://maps.app.goo.gl/s6engaQRzCNNccHj9"
+      }
+    ]
+  },
+  "contactSection": {
+    "eyebrow": "Contact Us",
+    "title": "Get in Touch With Us",
+    "description": "We would love to hear from you. Whether you are curious about our coffee class, planning a small group session, or simply want quick assistance, send us a message and we will get back to you as soon as possible.",
+    "formTitle": "Send A Message",
+    "formDescription": "Share your thoughts with us. We are always happy to hear from coffee lovers.",
+    "backgroundImage": "/assets/images/contact-background.avif",
+    "submitLabel": "Submit Message"
+  }
+}
