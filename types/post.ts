@@ -1,7 +1,13 @@
 export type BlogCategory = {
   id: string;
+  slug?: string;
   label: string;
   icon?: string;
+  description?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  order?: number;
+  status?: "active" | "hidden";
 };
 
 export type BlogPost = {

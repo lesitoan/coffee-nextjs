@@ -12,6 +12,12 @@ export const testimonialsData = testimonials as Array<{
 }>;
 export const blogCategories = categories as BlogCategory[];
 
+export function getEditableCategories() {
+  return blogCategories
+    .filter((category) => category.id !== "all")
+    .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+}
+
 export function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 }

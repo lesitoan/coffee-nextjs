@@ -4,7 +4,7 @@ import type { BlogPost } from "@/types/post";
 
 const postsDir = path.join(process.cwd(), "content", "posts");
 
-export function getAllPosts(): BlogPost[] {
+export function getAllPosts(options: { includeDrafts?: boolean } = {}): BlogPost[] {
   if (!fs.existsSync(postsDir)) return [];
 
   return fs
@@ -14,14 +14,14 @@ export function getAllPosts(): BlogPost[] {
       const raw = fs.readFileSync(path.join(postsDir, file), "utf8");
       return JSON.parse(raw) as BlogPost;
     })
-    .filter((post) => post.status === "published")
+    .filter((post) => options.includeDrafts || post.status === "published")
     .sort((a, b) => {
       return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
     });
 }
 
 export function getPostBySlug(slug: string) {
-  return getAllPosts().find((post) => post.slug === slug || post.id === slug) ?? null;
+  return getAllPosts({ includeDrafts: true }).find((post) => post.slug === slug || post.id === slug) ?? null;
 }
 
 export function getFeaturedPost() {
