@@ -70,7 +70,7 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+    <form onSubmit={onSubmit} className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-coffee-600">{category ? "Edit Category" : "New Category"}</p>
@@ -78,54 +78,54 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
         </div>
         <div className="flex gap-2">
           {category ? (
-            <button type="button" onClick={deleteCategory} disabled={saving} className="rounded-xl border border-red-200 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-50 disabled:opacity-60">
+            <button type="button" onClick={deleteCategory} disabled={saving} className="rounded-sm border border-red-200 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-50 disabled:opacity-60">
               Delete
             </button>
           ) : null}
-          <button disabled={saving} className="rounded-xl bg-coffee-700 px-5 py-2 text-sm font-bold text-white transition hover:bg-coffee-800 disabled:opacity-60">
+          <button disabled={saving} className="rounded-sm bg-coffee-700 px-5 py-2 text-sm font-bold text-white transition hover:bg-coffee-800 disabled:opacity-60">
             {saving ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
 
-      {error ? <div className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700">{error}</div> : null}
-      {status ? <div className="mb-5 rounded-xl border border-coffee-200 bg-coffee-50 p-3 text-sm font-medium text-coffee-800">{status}</div> : null}
+      {error ? <div className="mb-5 rounded-sm border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700">{error}</div> : null}
+      {status ? <div className="mb-5 rounded-sm border border-coffee-200 bg-coffee-50 p-3 text-sm font-medium text-coffee-800">{status}</div> : null}
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">Label</span>
-          <input name="label" defaultValue={category?.label} required className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <input name="label" defaultValue={category?.label} required className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">Slug / ID</span>
-          <input name="id" defaultValue={category?.id} disabled={Boolean(category)} className="w-full rounded-xl border border-stone-300 px-4 py-3 disabled:bg-stone-100" />
+          <input name="id" defaultValue={category?.id} disabled={Boolean(category)} className="w-full rounded-sm border border-stone-300 px-4 py-3 disabled:bg-stone-100" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">Icon class</span>
-          <input name="icon" defaultValue={category?.icon || "fa-solid fa-newspaper"} className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <input name="icon" defaultValue={category?.icon || "fa-solid fa-newspaper"} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">Order</span>
-          <input name="order" type="number" defaultValue={category?.order || 1} className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <input name="order" type="number" defaultValue={category?.order || 1} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">Status</span>
-          <select name="status" defaultValue={category?.status || "active"} className="w-full rounded-xl border border-stone-300 px-4 py-3">
+          <select name="status" defaultValue={category?.status || "active"} className="w-full rounded-sm border border-stone-300 px-4 py-3">
             <option value="active">Active</option>
             <option value="hidden">Hidden</option>
           </select>
         </label>
         <label className="md:col-span-2">
           <span className="mb-2 block text-sm font-bold text-stone-700">Description</span>
-          <textarea name="description" defaultValue={category?.description} rows={3} className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <textarea name="description" defaultValue={category?.description} rows={3} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">SEO Title</span>
-          <input name="seoTitle" defaultValue={category?.seoTitle} className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <input name="seoTitle" defaultValue={category?.seoTitle} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
           <span className="mb-2 block text-sm font-bold text-stone-700">SEO Description</span>
-          <input name="seoDescription" defaultValue={category?.seoDescription} className="w-full rounded-xl border border-stone-300 px-4 py-3" />
+          <input name="seoDescription" defaultValue={category?.seoDescription} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
       </div>
     </form>

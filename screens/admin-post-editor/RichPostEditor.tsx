@@ -384,26 +384,28 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: R
         <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={uploadImage} />
       </div>
 
-      <div
-        ref={editorRef}
-        className="rich-editor-canvas"
-        contentEditable
-        suppressContentEditableWarning
-        role="textbox"
-        aria-label="Post content"
-        onInput={syncHtml}
-        onBlur={syncHtml}
-      />
-
-      <details className="rich-editor-source">
-        <summary>HTML source</summary>
-        <textarea
-          value={html}
-          onChange={(event) => setHtml(event.target.value)}
-          rows={10}
-          className="mt-3 w-full rounded-xl border border-stone-300 px-4 py-3 font-mono text-sm"
+      <div className="rich-editor-content-wrapper">
+        <div
+          ref={editorRef}
+          className="rich-editor-canvas"
+          contentEditable
+          suppressContentEditableWarning
+          role="textbox"
+          aria-label="Post content"
+          onInput={syncHtml}
+          onBlur={syncHtml}
         />
-      </details>
+
+        <details className="rich-editor-source">
+          <summary>HTML source</summary>
+          <textarea
+            value={html}
+            onChange={(event) => setHtml(event.target.value)}
+            rows={10}
+            className="mt-3 w-full rounded-sm border border-stone-300 px-4 py-3 font-mono text-sm"
+          />
+        </details>
+      </div>
     </div>
   );
 }

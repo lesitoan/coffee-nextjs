@@ -5,7 +5,8 @@
 :root {
   --soft-tan-bg: rgba(210, 180, 140, 0.15);
   --soft-tan-solid: #f8f4ee;
-  --font-merriweather: Merriweather, Georgia, serif;
+  --font-merriweather: var(--font-merriweather), Merriweather, Georgia, serif;
+  --font-inter: var(--font-inter), Inter, Arial, sans-serif;
 }
 
 html {
@@ -273,15 +274,18 @@ header {
 }
 
 .rich-editor-shell {
+  position: relative;
   overflow: hidden;
   border: 1px solid #d6d3d1;
-  border-radius: 1rem;
+  border-radius: 0.125rem;
   background: #f8f4ee;
+  display: flex;
+  flex-direction: column;
 }
 
 .rich-editor-toolbar {
   position: sticky;
-  top: 5rem;
+  top: 0;
   z-index: 20;
   display: flex;
   flex-wrap: wrap;
@@ -289,8 +293,16 @@ header {
   align-items: center;
   padding: 0.75rem;
   border-bottom: 1px solid #d6d3d1;
-  background: rgba(248, 244, 238, 0.96);
+  background: rgba(248, 244, 238, 0.98);
   backdrop-filter: blur(8px);
+  flex-shrink: 0;
+}
+
+.rich-editor-content-wrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 16rem);
+  min-height: 28rem;
+  padding: 1rem 0;
 }
 
 .rich-editor-button {
@@ -299,7 +311,7 @@ header {
   height: 2.25rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.65rem;
+  border-radius: 0.125rem;
   color: #44403c;
   transition: background 150ms ease, color 150ms ease, opacity 150ms ease;
 }
@@ -324,7 +336,7 @@ header {
 .rich-editor-select {
   min-height: 2.25rem;
   border: 1px solid #d6d3d1;
-  border-radius: 0.65rem;
+  border-radius: 0.125rem;
   background: #fff;
   padding: 0 0.75rem;
   font-size: 0.875rem;
@@ -347,7 +359,7 @@ header {
   height: 2.25rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.65rem;
+  border-radius: 0.125rem;
   color: #44403c;
   cursor: pointer;
   transition: background 150ms ease, color 150ms ease;
@@ -373,7 +385,7 @@ header {
   align-items: center;
   gap: 0.25rem;
   border: 1px solid #d6d3d1;
-  border-radius: 0.65rem;
+  border-radius: 0.125rem;
   background: #fff;
   padding: 0 0.45rem;
   color: #78716c;
@@ -407,7 +419,7 @@ header {
 
 .rich-editor-canvas h1 {
   margin: 0 0 1.5rem;
-  font-family: Georgia, serif;
+  font-family: var(--font-merriweather), Georgia, serif;
   font-size: 2.4rem;
   line-height: 1.2;
   font-weight: 700;
@@ -417,7 +429,7 @@ header {
   margin: 2.2rem 0 1rem;
   border-bottom: 1px solid #e7e5e4;
   padding-bottom: 0.45rem;
-  font-family: Georgia, serif;
+  font-family: var(--font-merriweather), Georgia, serif;
   font-size: 1.75rem;
   line-height: 1.3;
   font-weight: 700;
@@ -455,7 +467,7 @@ header {
   border-left: 4px solid #6b4736;
   padding: 0.6rem 0 0.6rem 1.25rem;
   color: #44403c;
-  font-family: Georgia, serif;
+  font-family: var(--font-merriweather), Georgia, serif;
   font-style: italic;
 }
 

@@ -24,8 +24,8 @@ const config: Config = {
         }
       },
       fontFamily: {
-        sans: ["Inter", "Arial", "Helvetica", "sans-serif"],
-        serif: ["Merriweather", "Georgia", "serif"]
+        sans: ["var(--font-inter)", "Inter", "Arial", "Helvetica", "sans-serif"],
+        serif: ["var(--font-merriweather)", "Georgia", "serif"]
       }
     }
   },

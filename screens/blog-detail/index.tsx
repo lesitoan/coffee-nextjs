@@ -49,7 +49,7 @@ export function BlogDetailScreen({ post, relatedPosts, html, headings }: BlogDet
           <span className="max-w-[200px] truncate font-semibold text-coffee-700 sm:max-w-none">{post.categoryName}</span>
         </nav>
 
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="min-w-0 lg:col-span-7">
             <article className="mb-12">
               <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-stone-500 sm:gap-3">
@@ -134,7 +134,7 @@ export function BlogDetailScreen({ post, relatedPosts, html, headings }: BlogDet
           </div>
 
           <aside className="w-full lg:col-span-5">
-            <div className="space-y-6 pr-1 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+            <div className="space-y-6 pr-1 lg:sticky lg:top-28">
               <div className="hidden lg:block">
                 <BlogToc headings={headings} />
               </div>
