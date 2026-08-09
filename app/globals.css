@@ -205,15 +205,42 @@ header {
   transition: transform 180ms ease;
 }
 
-.blog-content img,
 .blog-hero-image {
-  width: 66.666667%;
-  max-width: 66.666667%;
+  width: 100%;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: block;
   height: auto;
   border-radius: 0;
+}
+
+.blog-content figure {
+  max-width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  height: auto;
+}
+
+.blog-content::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.blog-content figure[style],
+.blog-content div[style*="width"] {
+  max-width: 100%;
+}
+
+.blog-content figure > img {
+  display: block;
+  width: 100%;
+}
+
+.blog-content img {
+  max-width: 100%;
+  height: auto;
 }
 
 .blog-content h2 {
