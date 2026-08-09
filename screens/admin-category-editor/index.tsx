@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import type { BlogCategory } from "@/types/post";
 
 type AdminCategoryEditorScreenProps = {
@@ -31,6 +32,7 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
     setSaving(true);
     setError("");
     setStatus("Saving to GitHub...");
+    const toastId = toast.loading("Đang lưu category...");
     try {
       const response = await fetch(category ? `/api/admin/categories/${category.id}` : "/api/admin/categories", {
         method: category ? "PUT" : "POST",
@@ -40,10 +42,13 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Could not save category.");
       setStatus("Saved to GitHub. Pull latest source locally after the commit finishes.");
+      toast.success("Đã lưu category.", { id: toastId });
       router.refresh();
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : "Could not save category.");
+      const message = saveError instanceof Error ? saveError.message : "Could not save category.";
+      setError(message);
       setStatus("");
+      toast.error(message, { id: toastId });
     } finally {
       setSaving(false);
     }
@@ -56,14 +61,18 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
     setSaving(true);
     setError("");
     setStatus("Deleting from GitHub...");
+    const toastId = toast.loading("Đang xoá category...");
     try {
       const response = await fetch(`/api/admin/categories/${category.id}`, { method: "DELETE" });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Could not delete category.");
       setStatus("Deleted on GitHub. Pull latest source locally to remove it from this dev copy.");
+      toast.success("Đã xoá category.", { id: toastId });
     } catch (deleteError) {
-      setError(deleteError instanceof Error ? deleteError.message : "Could not delete category.");
+      const message = deleteError instanceof Error ? deleteError.message : "Could not delete category.";
+      setError(message);
       setStatus("");
+      toast.error(message, { id: toastId });
     } finally {
       setSaving(false);
     }

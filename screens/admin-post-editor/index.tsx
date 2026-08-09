@@ -2,6 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { setPostSaveLock } from "@/lib/admin/post-save-lock";
 import type { BlogCategory, BlogPost } from "@/types/post";
 import { RichPostEditor } from "./RichPostEditor";
 
@@ -27,14 +29,59 @@ const emptyPost: Partial<BlogPost> = {
   html: "<p>Write your post content here.</p>"
 };
 
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+function parseReadingMinutes(value?: string) {
+  const parsed = Number(String(value || "").match(/\d+/)?.[0]);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 5;
+}
+
 export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScreenProps) {
   const router = useRouter();
   const initial = post || emptyPost;
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [editorUploading, setEditorUploading] = useState(false);
   const [coverImage, setCoverImage] = useState(initial.coverImage || "");
+  const [title, setTitle] = useState(initial.title || "");
   const [slug, setSlug] = useState(initial.slug || "");
+  const [slugEdited, setSlugEdited] = useState(Boolean(initial.slug));
+  const [readingMinutes, setReadingMinutes] = useState(parseReadingMinutes(initial.readingTime));
+  const [tags, setTags] = useState<string[]>(initial.tags || []);
+  const [tagInput, setTagInput] = useState("");
+  const uploadBusy = coverUploading || editorUploading;
+
+  function updateTitle(value: string) {
+    setTitle(value);
+    if (!slugEdited) setSlug(slugify(value));
+  }
+
+  function updateSlug(value: string) {
+    setSlug(slugify(value));
+    setSlugEdited(true);
+  }
+
+  function addTag() {
+    const nextTag = tagInput.trim();
+    if (!nextTag) return;
+    if (tags.some((tag) => tag.toLowerCase() === nextTag.toLowerCase())) {
+      toast.info("Tag này đã tồn tại.");
+      setTagInput("");
+      return;
+    }
+    setTags((currentTags) => [...currentTags, nextTag]);
+    setTagInput("");
+  }
 
   async function uploadCover(file: File) {
     const safeSlug = slug || "draft";
@@ -43,25 +90,42 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
     formData.set("slug", safeSlug);
     setStatus("Uploading image to GitHub...");
     setError("");
+    setCoverUploading(true);
+    const toastId = toast.loading("Đang upload cover image...");
 
-    const response = await fetch("/api/admin/media", {
-      method: "POST",
-      body: formData
-    });
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.error || "Could not upload image.");
-    setCoverImage(result.url);
-    setStatus("Image uploaded. Save the post to use it.");
+    try {
+      const response = await fetch("/api/admin/media", {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not upload image.");
+      setCoverImage(result.url);
+      setStatus("Image uploaded. Save the post to use it.");
+      toast.success("Cover image đã upload xong.", { id: toastId });
+    } catch (uploadError) {
+      const message = uploadError instanceof Error ? uploadError.message : "Could not upload image.";
+      setError(message);
+      setStatus("");
+      toast.error(message, { id: toastId });
+      throw uploadError;
+    } finally {
+      setCoverUploading(false);
+    }
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (uploadBusy) {
+      toast.warning("Đang upload ảnh, vui lòng chờ hoàn tất rồi hãy lưu.");
+      return;
+    }
     const form = event.currentTarget;
     const formData = new FormData(form);
     const payload = {
       id: post?.id,
-      title: String(formData.get("title") || ""),
-      slug: String(formData.get("slug") || ""),
+      title,
+      slug,
       status: String(formData.get("status") || "published"),
       excerpt: String(formData.get("excerpt") || ""),
       seoTitle: String(formData.get("seoTitle") || ""),
@@ -70,9 +134,9 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
       publishedAt: String(formData.get("publishedAt") || ""),
       coverImage,
       coverAlt: String(formData.get("coverAlt") || ""),
-      readingTime: String(formData.get("readingTime") || ""),
+      readingTime: `${Math.max(1, readingMinutes)} min read`,
       featured: formData.get("featured") === "on",
-      tags: String(formData.get("tags") || ""),
+      tags,
       html: String(formData.get("html") || ""),
       tiptapJson: post?.tiptapJson ?? null
     };
@@ -80,6 +144,7 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
     setSaving(true);
     setError("");
     setStatus("Saving to GitHub...");
+    const toastId = toast.loading("Đang lưu bài viết...");
 
     try {
       const endpoint = post ? `/api/admin/posts/${post.slug}` : "/api/admin/posts";
@@ -91,10 +156,14 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Could not save post.");
       setStatus(`Saved ${result.post.slug} to GitHub. Pull latest source locally after the commit finishes.`);
-      router.refresh();
+      setPostSaveLock(result.post.slug);
+      toast.success("Đã lưu bài viết. Vui lòng chờ deploy hoàn tất trước khi sửa lại.", { id: toastId });
+      router.push("/admin/posts");
     } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : "Could not save post.");
+      const message = saveError instanceof Error ? saveError.message : "Could not save post.";
+      setError(message);
       setStatus("");
+      toast.error(message, { id: toastId });
     } finally {
       setSaving(false);
     }
@@ -107,14 +176,19 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
     setSaving(true);
     setError("");
     setStatus("Deleting from GitHub...");
+    const toastId = toast.loading("Đang xoá bài viết...");
     try {
       const response = await fetch(`/api/admin/posts/${post.slug}`, { method: "DELETE" });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Could not delete post.");
       setStatus("Deleted on GitHub. Pull latest source locally to remove it from this dev copy.");
+      toast.success("Đã xoá bài viết.", { id: toastId });
+      router.push("/admin/posts");
     } catch (deleteError) {
-      setError(deleteError instanceof Error ? deleteError.message : "Could not delete post.");
+      const message = deleteError instanceof Error ? deleteError.message : "Could not delete post.";
+      setError(message);
       setStatus("");
+      toast.error(message, { id: toastId });
     } finally {
       setSaving(false);
     }
@@ -134,8 +208,8 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
                 Delete
               </button>
             ) : null}
-            <button disabled={saving} className="rounded-sm bg-coffee-700 px-5 py-2 text-sm font-bold text-white transition hover:bg-coffee-800 disabled:opacity-60">
-              {saving ? "Saving..." : "Save"}
+            <button disabled={saving || uploadBusy} className="rounded-sm bg-coffee-700 px-5 py-2 text-sm font-bold text-white transition hover:bg-coffee-800 disabled:opacity-60">
+              {uploadBusy ? "Uploading image..." : saving ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
@@ -146,11 +220,11 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <label className="md:col-span-2">
             <span className="mb-2 block text-sm font-bold text-stone-700">Title</span>
-            <input name="title" defaultValue={initial.title} required className="w-full rounded-sm border border-stone-300 px-4 py-3" />
+            <input name="title" value={title} onChange={(event) => updateTitle(event.target.value)} required className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
             <span className="mb-2 block text-sm font-bold text-stone-700">Slug</span>
-            <input name="slug" value={slug} onChange={(event) => setSlug(event.target.value)} placeholder="egg-coffee-secrets" className="w-full rounded-sm border border-stone-300 px-4 py-3" />
+            <input name="slug" value={slug} onChange={(event) => updateSlug(event.target.value)} placeholder="egg-coffee-secrets" className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
             <span className="mb-2 block text-sm font-bold text-stone-700">Status</span>
@@ -176,12 +250,51 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
           </label>
           <label>
             <span className="mb-2 block text-sm font-bold text-stone-700">Reading Time</span>
-            <input name="readingTime" defaultValue={initial.readingTime} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
+            <div className="flex overflow-hidden rounded-sm border border-stone-300 bg-white">
+              <input
+                name="readingTimeMinutes"
+                type="number"
+                min={1}
+                value={readingMinutes}
+                onChange={(event) => setReadingMinutes(Math.max(1, Number(event.target.value) || 1))}
+                className="w-full px-4 py-3 outline-none"
+              />
+              <span className="flex items-center border-l border-stone-200 px-4 text-sm font-semibold text-stone-500">min read</span>
+            </div>
           </label>
-          <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Tags, comma separated</span>
-            <input name="tags" defaultValue={initial.tags?.join(", ")} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
-          </label>
+          <div>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Tags</span>
+            <div className="flex gap-2">
+              <input
+                value={tagInput}
+                onChange={(event) => setTagInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    addTag();
+                  }
+                }}
+                className="w-full rounded-sm border border-stone-300 px-4 py-3"
+                placeholder="Egg Coffee"
+              />
+              <button type="button" onClick={addTag} className="rounded-sm border border-stone-300 px-4 py-3 text-sm font-bold text-stone-700 transition hover:border-coffee-700 hover:text-coffee-700">
+                Add
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setTags((currentTags) => currentTags.filter((currentTag) => currentTag !== tag))}
+                  className="rounded-full bg-coffee-50 px-3 py-1 text-xs font-bold text-coffee-800 transition hover:bg-red-50 hover:text-red-700"
+                  title="Remove tag"
+                >
+                  {tag} x
+                </button>
+              ))}
+            </div>
+          </div>
           <label className="flex items-center gap-3 rounded-sm border border-stone-200 px-4 py-3">
             <input name="featured" type="checkbox" defaultChecked={initial.featured} />
             <span className="text-sm font-bold text-stone-700">Featured story</span>
@@ -212,7 +325,7 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
             <span className="mb-2 block text-sm font-bold text-stone-700">Cover Image</span>
             <div className="flex flex-col gap-3 md:flex-row">
               <input value={coverImage} onChange={(event) => setCoverImage(event.target.value)} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
-              <input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadCover(event.target.files[0]).catch((uploadError) => setError(uploadError.message))} className="rounded-sm border border-stone-300 px-4 py-3 text-sm" />
+              <input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadCover(event.target.files[0]).catch(() => undefined)} className="rounded-sm border border-stone-300 px-4 py-3 text-sm" />
             </div>
           </div>
         </div>
@@ -229,6 +342,7 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
           slug={slug}
           onStatus={setStatus}
           onError={setError}
+          onUploadingChange={setEditorUploading}
         />
       </div>
     </form>

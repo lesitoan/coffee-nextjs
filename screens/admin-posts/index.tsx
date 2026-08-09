@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { toast } from "sonner";
+import { getPostSaveRemainingSeconds } from "@/lib/admin/post-save-lock";
 import type { BlogPost } from "@/types/post";
 
 type AdminPostsScreenProps = {
@@ -6,6 +10,18 @@ type AdminPostsScreenProps = {
 };
 
 export function AdminPostsScreen({ posts }: AdminPostsScreenProps) {
+  function handleEditClick(event: React.MouseEvent<HTMLAnchorElement>, slug: string, href: string) {
+    const remainingSeconds = getPostSaveRemainingSeconds(slug);
+
+    event.preventDefault();
+    if (remainingSeconds > 0) {
+      toast.warning(`Bài viết đang chờ deploy hoàn tất. Vui lòng chờ thêm ${remainingSeconds} giây.`);
+      return;
+    }
+
+    window.location.assign(href);
+  }
+
   return (
     <div className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
@@ -42,7 +58,7 @@ export function AdminPostsScreen({ posts }: AdminPostsScreenProps) {
                 </td>
                 <td className="py-4 pr-4 text-stone-600">{post.updatedAt}</td>
                 <td className="py-4 text-right">
-                  <Link href={`/admin/posts/${post.slug}/edit`} className="font-bold text-coffee-700 hover:underline">
+                  <Link href={`/admin/posts/${post.slug}/edit`} onClick={(event) => handleEditClick(event, post.slug, `/admin/posts/${post.slug}/edit`)} className="font-bold text-coffee-700 hover:underline">
                     Edit
                   </Link>
                 </td>

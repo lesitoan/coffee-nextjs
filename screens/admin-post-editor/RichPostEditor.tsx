@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   AlignCenter,
   AlignJustify,
@@ -38,6 +39,7 @@ type RichPostEditorProps = {
   slug: string;
   onStatus?: (message: string) => void;
   onError?: (message: string) => void;
+  onUploadingChange?: (uploading: boolean) => void;
 };
 
 function sanitizeEditorHtml(html: string) {
@@ -75,9 +77,24 @@ const fontSizes = [
 type ResizeDirection = "e" | "w" | "se" | "sw";
 type ResizePointerEvent = React.PointerEvent<HTMLButtonElement> | React.MouseEvent<HTMLButtonElement>;
 
-export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: RichPostEditorProps) {
+function replacePreviewSources(html: string) {
+  if (typeof document === "undefined") return html;
+
+  const template = document.createElement("template");
+  template.innerHTML = html;
+  template.content.querySelectorAll("img[data-persist-src]").forEach((image) => {
+    const persistSrc = image.getAttribute("data-persist-src");
+    if (persistSrc) image.setAttribute("src", persistSrc);
+    image.removeAttribute("data-uploading");
+    image.removeAttribute("data-upload-id");
+  });
+  return template.innerHTML;
+}
+
+export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onUploadingChange }: RichPostEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewUrlsRef = useRef<string[]>([]);
   const [html, setHtml] = useState(initialHtml || "<p>Write your post content here.</p>");
   const [block, setBlock] = useState("p");
   const [fontFamily, setFontFamily] = useState("");
@@ -91,12 +108,23 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: R
   const [selectedTarget, setSelectedTarget] = useState<HTMLElement | null>(null);
   const [overlayPos, setOverlayPos] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const [currentWidthPct, setCurrentWidthPct] = useState<number>(100);
+  const [uploadingImages, setUploadingImages] = useState(0);
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== html) {
       editorRef.current.innerHTML = html;
     }
   }, [html]);
+
+  useEffect(() => {
+    onUploadingChange?.(uploadingImages > 0);
+  }, [onUploadingChange, uploadingImages]);
+
+  useEffect(() => {
+    return () => {
+      previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -113,6 +141,11 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: R
   function syncHtml() {
     const nextHtml = sanitizeEditorHtml(editorRef.current?.innerHTML || "");
     setHtml(nextHtml);
+  }
+
+  function getPersistedHtml() {
+    if (!editorRef.current) return replacePreviewSources(sanitizeEditorHtml(html));
+    return replacePreviewSources(sanitizeEditorHtml(editorRef.current.innerHTML || ""));
   }
 
   function focusEditor() {
@@ -436,13 +469,27 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: R
     if (!file) return;
 
     const safeSlug = slug?.trim() || "draft";
+    const uploadId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const previewUrl = URL.createObjectURL(file);
+    previewUrlsRef.current.push(previewUrl);
     const formData = new FormData();
     formData.set("file", file);
     formData.set("slug", safeSlug);
 
     setBusy(true);
+    setUploadingImages((count) => count + 1);
     onStatus?.("Uploading image to GitHub...");
     onError?.("");
+    toast.loading("Đang upload ảnh...", { id: uploadId });
+
+    const previewAlt = file.name.replace(/\.[^.]+$/, "").replace(/"/g, "&quot;");
+    insertHtml(`
+      <figure style="width: 100%; max-width: 100%; margin: 1.5rem auto; display: block;">
+        <img src="${previewUrl}" data-upload-id="${uploadId}" data-uploading="true" alt="${previewAlt}" style="width: 100%; height: auto;" />
+        <figcaption>Write image caption here</figcaption>
+      </figure>
+      <p><br></p>
+    `);
 
     try {
       const response = await fetch("/api/admin/media", {
@@ -453,26 +500,31 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError }: R
       if (!response.ok) throw new Error(result.error || "Could not upload image.");
 
       const alt = window.prompt("Image alt text for SEO", file.name.replace(/\.[^.]+$/, "")) || "";
-      insertHtml(`
-        <figure style="width: 100%; max-width: 100%; margin: 1.5rem auto; display: block;">
-          <img src="${result.url}" alt="${alt.replace(/"/g, "&quot;")}" style="width: 100%; height: auto;" />
-          <figcaption>Write image caption here</figcaption>
-        </figure>
-        <p><br></p>
-      `);
+      const image = editorRef.current?.querySelector(`img[data-upload-id="${uploadId}"]`) as HTMLImageElement | null;
+      if (image) {
+        image.dataset.persistSrc = result.url;
+        image.removeAttribute("data-uploading");
+        image.alt = alt;
+        syncHtml();
+      }
       onStatus?.("Image uploaded and inserted.");
+      toast.success("Ảnh đã upload xong.", { id: uploadId });
     } catch (error) {
+      editorRef.current?.querySelector(`img[data-upload-id="${uploadId}"]`)?.closest("figure")?.remove();
+      syncHtml();
       onError?.(error instanceof Error ? error.message : "Could not upload image.");
       onStatus?.("");
+      toast.error(error instanceof Error ? error.message : "Không upload được ảnh.", { id: uploadId });
     } finally {
       setBusy(false);
+      setUploadingImages((count) => Math.max(0, count - 1));
       event.target.value = "";
     }
   }
 
   return (
     <div className="rich-editor-shell">
-      <input type="hidden" name={name} value={html} />
+      <input type="hidden" name={name} value={getPersistedHtml()} />
       <div className="rich-editor-toolbar" aria-label="Post editor toolbar">
         <select
           value={block}
