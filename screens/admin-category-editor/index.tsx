@@ -21,7 +21,7 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
     const payload = {
       id: category?.id || String(formData.get("id") || ""),
       label: String(formData.get("label") || ""),
-      icon: String(formData.get("icon") || ""),
+      icon: category?.icon,
       description: String(formData.get("description") || ""),
       seoTitle: String(formData.get("seoTitle") || ""),
       seoDescription: String(formData.get("seoDescription") || ""),
@@ -102,38 +102,34 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">Label</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">Label (tên danh mục hiển thị cho người đọc)</span>
           <input name="label" defaultValue={category?.label} required className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">Slug / ID</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">Slug / ID (mã định danh dùng trong đường dẫn và dữ liệu)</span>
           <input name="id" defaultValue={category?.id} disabled={Boolean(category)} className="w-full rounded-sm border border-stone-300 px-4 py-3 disabled:bg-stone-100" />
         </label>
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">Icon class</span>
-          <input name="icon" defaultValue={category?.icon || "fa-solid fa-newspaper"} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
-        </label>
-        <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">Order</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">Order (thứ tự sắp xếp danh mục, số nhỏ hiện trước)</span>
           <input name="order" type="number" defaultValue={category?.order || 1} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">Status</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">Status (Active là hiển thị, Hidden là ẩn)</span>
           <select name="status" defaultValue={category?.status || "active"} className="w-full rounded-sm border border-stone-300 px-4 py-3">
             <option value="active">Active</option>
             <option value="hidden">Hidden</option>
           </select>
         </label>
         <label className="md:col-span-2">
-          <span className="mb-2 block text-sm font-bold text-stone-700">Description</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">Description (mô tả ngắn về nội dung của danh mục)</span>
           <textarea name="description" defaultValue={category?.description} rows={3} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">SEO Title</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">SEO Title (tiêu đề danh mục hiển thị trên Google)</span>
           <input name="seoTitle" defaultValue={category?.seoTitle} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
         <label>
-          <span className="mb-2 block text-sm font-bold text-stone-700">SEO Description</span>
+          <span className="mb-2 block text-sm font-bold text-stone-700">SEO Description (mô tả ngắn của danh mục trên kết quả tìm kiếm)</span>
           <input name="seoDescription" defaultValue={category?.seoDescription} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
         </label>
       </div>

@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 const SESSION_COOKIE = "classic_coffee_admin";
 const OAUTH_STATE_COOKIE = "classic_coffee_oauth_state";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+// TODO: Set this back to false to re-enable GitHub admin login.
+const TEMP_DISABLE_ADMIN_AUTH = true;
 
 export type AdminSession = {
   login: string;
@@ -74,12 +76,24 @@ export async function getCurrentAdmin() {
 }
 
 export async function requireAdmin() {
+  if (TEMP_DISABLE_ADMIN_AUTH) {
+    const now = Math.floor(Date.now() / 1000);
+    return {
+      login: "local-admin",
+      name: "Local Admin",
+      iat: now,
+      exp: now + SESSION_MAX_AGE
+    } satisfies AdminSession;
+  }
+
   const admin = await getCurrentAdmin();
   if (!admin) redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent("/admin")}`);
   return admin;
 }
 
 export async function assertAdminApi() {
+  if (TEMP_DISABLE_ADMIN_AUTH) return null;
+
   const admin = await getCurrentAdmin();
   if (!admin) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
