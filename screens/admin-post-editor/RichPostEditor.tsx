@@ -74,6 +74,15 @@ const fontSizes = [
   { label: "40", value: "40px" }
 ];
 
+const lineHeights = [
+  { label: "Line 1.2", value: "1.2" },
+  { label: "Line 1.4", value: "1.4" },
+  { label: "Line 1.6", value: "1.6" },
+  { label: "Line 1.8", value: "1.8" },
+  { label: "Line 2.0", value: "2" },
+  { label: "Line 2.4", value: "2.4" }
+];
+
 type ResizeDirection = "e" | "w" | "se" | "sw";
 type ResizePointerEvent = React.PointerEvent<HTMLButtonElement> | React.MouseEvent<HTMLButtonElement>;
 
@@ -99,6 +108,7 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onU
   const [block, setBlock] = useState("p");
   const [fontFamily, setFontFamily] = useState("");
   const [fontSize, setFontSize] = useState("16px");
+  const [lineHeight, setLineHeight] = useState("1.8");
   const [textColor, setTextColor] = useState("#292524");
   const [highlightColor, setHighlightColor] = useState("#f2e8e5");
   const [tableRows, setTableRows] = useState(3);
@@ -398,6 +408,18 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onU
     syncHtml();
   }
 
+  function getEditableBlock(node: Node | null) {
+    if (!editorRef.current || !node) return null;
+    const element = node.nodeType === Node.ELEMENT_NODE ? (node as HTMLElement) : node.parentElement;
+    return element?.closest("p, li, h1, h2, h3, blockquote, figcaption, td, th") as HTMLElement | null;
+  }
+
+  function getBlocksInSelection(range: Range) {
+    if (!editorRef.current) return [];
+    const blocks = Array.from(editorRef.current.querySelectorAll<HTMLElement>("p, li, h1, h2, h3, blockquote, figcaption, td, th"));
+    return blocks.filter((blockElement) => range.intersectsNode(blockElement));
+  }
+
   function applyFontFamily(value: string) {
     setFontFamily(value);
     if (!value) return;
@@ -407,6 +429,35 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onU
   function applyFontSize(value: string) {
     setFontSize(value);
     wrapSelection(`font-size: ${value};`);
+  }
+
+  function applyLineHeight(value: string) {
+    setLineHeight(value);
+    focusEditor();
+
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) {
+      const blockElement = getEditableBlock(selection.anchorNode);
+      if (blockElement) {
+        blockElement.style.lineHeight = value;
+        syncHtml();
+      }
+      return;
+    }
+
+    const selectedBlocks = getBlocksInSelection(range);
+    if (selectedBlocks.length) {
+      selectedBlocks.forEach((blockElement) => {
+        blockElement.style.lineHeight = value;
+      });
+      syncHtml();
+      return;
+    }
+
+    wrapSelection(`line-height: ${value};`);
   }
 
   function applyTextColor(value: string) {
@@ -565,6 +616,19 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onU
           ))}
         </select>
 
+        <select
+          value={lineHeight}
+          onChange={(event) => applyLineHeight(event.target.value)}
+          className="rich-editor-select rich-editor-line-height-select"
+          aria-label="Line height"
+        >
+          {lineHeights.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
         <ToolbarButton label={toolbarButtonLabel("Undo", "Ctrl+Z")} onClick={() => command("undo")}>
           <Undo2 size={16} />
         </ToolbarButton>
@@ -703,7 +767,7 @@ export function RichPostEditor({ name, initialHtml, slug, onStatus, onError, onU
             <ResizeHandle direction="ew" className="-left-2.5 top-1/2 -translate-y-1/2" label="Kéo cạnh trái để thay đổi kích thước ảnh" onPointerDown={(event) => startResize(event, "w")} />
 
             {/* Floating Image Control Toolbar */}
-            <div className="pointer-events-auto absolute -top-12 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-sm border border-stone-200 bg-white p-1.5 shadow-xl text-xs whitespace-nowrap">
+            <div className="pointer-events-auto absolute -top-12 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-sm border border-stone-200 bg-white p-1.5 text-xs whitespace-nowrap">
               <span className="px-1 text-[11px] font-bold text-stone-500">Căn lề:</span>
               <button type="button" onClick={() => applyAlignment("left")} className="rounded-sm p-1 hover:bg-stone-100" title="Căn trái">
                 <AlignLeft size={14} />
@@ -803,7 +867,7 @@ function ResizeHandle({
       aria-label={label}
       title={label}
       onPointerDown={onPointerDown}
-      className={`pointer-events-auto absolute h-5 w-5 rounded-full border-2 border-white bg-coffee-700 shadow-lg transition hover:scale-125 ${cursorClass} ${className}`}
+      className={`pointer-events-auto absolute h-5 w-5 rounded-full border-2 border-white bg-coffee-700 transition hover:scale-125 ${cursorClass} ${className}`}
     />
   );
 }

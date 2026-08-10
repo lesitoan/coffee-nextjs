@@ -79,7 +79,7 @@ export function AdminCategoryEditorScreen({ category }: AdminCategoryEditorScree
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+    <form onSubmit={onSubmit} className="rounded-sm border border-stone-200 bg-white p-6">
       <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
         <div>
           <p className="text-xs font-bold uppercase tracking-widest text-coffee-600">{category ? "Edit Category" : "New Category"}</p>

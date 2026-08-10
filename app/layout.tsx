@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
-import { Toaster } from "sonner";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { BackToTop } from "@/components/ui/BackToTop";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AppChrome } from "@/components/layout/AppChrome";
 import { getSiteUrl, siteData } from "@/lib/content/site";
 import "./globals.css";
 
@@ -39,12 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <body className="font-sans text-stone-800 antialiased">
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
-        <BackToTop />
-        <ScrollReveal />
-        <Toaster richColors position="top-right" />
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

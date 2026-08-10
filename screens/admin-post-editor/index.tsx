@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { setPostSaveLock } from "@/lib/admin/post-save-lock";
+import { getPostSaveRemainingSeconds, setPostSaveLock } from "@/lib/admin/post-save-lock";
 import type { BlogCategory, BlogPost } from "@/types/post";
 import { RichPostEditor } from "./RichPostEditor";
 
@@ -30,12 +30,15 @@ const emptyPost: Partial<BlogPost> = {
 };
 
 function slugify(value: string) {
+  return normalizeSlugInput(value).replace(/^-+|-+$/g, "");
+}
+
+function normalizeSlugInput(value: string) {
   return value
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
     .slice(0, 80);
 }
 
@@ -47,12 +50,14 @@ function parseReadingMinutes(value?: string) {
 export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScreenProps) {
   const router = useRouter();
   const initial = post || emptyPost;
+  const [lockChecked, setLockChecked] = useState(!post);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [coverUploading, setCoverUploading] = useState(false);
   const [editorUploading, setEditorUploading] = useState(false);
   const [coverImage, setCoverImage] = useState(initial.coverImage || "");
+  const [coverPreview, setCoverPreview] = useState(initial.coverImage || "");
   const [title, setTitle] = useState(initial.title || "");
   const [slug, setSlug] = useState(initial.slug || "");
   const [slugEdited, setSlugEdited] = useState(Boolean(initial.slug));
@@ -61,13 +66,32 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
   const [tagInput, setTagInput] = useState("");
   const uploadBusy = coverUploading || editorUploading;
 
+  useEffect(() => {
+    if (!post) return;
+
+    const remainingSeconds = getPostSaveRemainingSeconds(post.slug);
+    if (remainingSeconds > 0) {
+      toast.warning(`Bài viết đang chờ deploy hoàn tất. Vui lòng chờ thêm ${remainingSeconds} giây.`);
+      router.replace("/admin/posts");
+      return;
+    }
+
+    setLockChecked(true);
+  }, [post, router]);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreview.startsWith("blob:")) URL.revokeObjectURL(coverPreview);
+    };
+  }, [coverPreview]);
+
   function updateTitle(value: string) {
     setTitle(value);
     if (!slugEdited) setSlug(slugify(value));
   }
 
   function updateSlug(value: string) {
-    setSlug(slugify(value));
+    setSlug(normalizeSlugInput(value));
     setSlugEdited(true);
   }
 
@@ -85,12 +109,17 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
 
   async function uploadCover(file: File) {
     const safeSlug = slug || "draft";
+    const previewUrl = URL.createObjectURL(file);
     const formData = new FormData();
     formData.set("file", file);
     formData.set("slug", safeSlug);
     setStatus("Uploading image to GitHub...");
     setError("");
     setCoverUploading(true);
+    setCoverPreview((currentPreview) => {
+      if (currentPreview.startsWith("blob:")) URL.revokeObjectURL(currentPreview);
+      return previewUrl;
+    });
     const toastId = toast.loading("Đang upload cover image...");
 
     try {
@@ -105,6 +134,7 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
       toast.success("Cover image đã upload xong.", { id: toastId });
     } catch (uploadError) {
       const message = uploadError instanceof Error ? uploadError.message : "Could not upload image.";
+      setCoverPreview(coverImage || "");
       setError(message);
       setStatus("");
       toast.error(message, { id: toastId });
@@ -194,9 +224,13 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
     }
   }
 
+  if (!lockChecked) {
+    return null;
+  }
+
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
-      <div className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+    <form onSubmit={onSubmit} className="space-y-0">
+      <div className="rounded-sm border border-stone-200 bg-white p-6">
         <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-coffee-600">{post ? "Edit Post" : "New Post"}</p>
@@ -219,22 +253,22 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <label className="md:col-span-2">
-            <span className="mb-2 block text-sm font-bold text-stone-700">Title</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Title (tên bài viết hiển thị cho người đọc)</span>
             <input name="title" value={title} onChange={(event) => updateTitle(event.target.value)} required className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Slug</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Slug (đường dẫn bài viết, không dấu, không khoảng trắng)</span>
             <input name="slug" value={slug} onChange={(event) => updateSlug(event.target.value)} placeholder="egg-coffee-secrets" className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Status</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Status (Published là hiển thị, Draft là bản nháp)</span>
             <select name="status" defaultValue={initial.status} className="w-full rounded-sm border border-stone-300 px-4 py-3">
               <option value="published">Published</option>
               <option value="draft">Draft</option>
             </select>
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Category</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Category (nhóm chủ đề của bài viết)</span>
             <select name="category" defaultValue={initial.category} required className="w-full rounded-sm border border-stone-300 px-4 py-3">
               <option value="">Select category</option>
               {categories.map((category) => (
@@ -245,11 +279,11 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
             </select>
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Published At</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Published At (ngày đăng bài)</span>
             <input name="publishedAt" type="date" defaultValue={initial.publishedAt} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Reading Time</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Reading Time (số phút ước tính để đọc bài)</span>
             <div className="flex overflow-hidden rounded-sm border border-stone-300 bg-white">
               <input
                 name="readingTimeMinutes"
@@ -263,7 +297,7 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
             </div>
           </label>
           <div>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Tags</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Tags (từ khóa phụ giúp phân loại và SEO)</span>
             <div className="flex gap-2">
               <input
                 value={tagInput}
@@ -297,44 +331,49 @@ export function AdminPostEditorScreen({ post, categories }: AdminPostEditorScree
           </div>
           <label className="flex items-center gap-3 rounded-sm border border-stone-200 px-4 py-3">
             <input name="featured" type="checkbox" defaultChecked={initial.featured} />
-            <span className="text-sm font-bold text-stone-700">Featured story</span>
+            <span className="text-sm font-bold text-stone-700">Featured story (đánh dấu bài viết nổi bật)</span>
           </label>
           <label className="md:col-span-2">
-            <span className="mb-2 block text-sm font-bold text-stone-700">Excerpt</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Excerpt (mô tả ngắn hiển thị ở danh sách bài viết)</span>
             <textarea name="excerpt" defaultValue={initial.excerpt} rows={3} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
         </div>
       </div>
 
-      <div className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="rounded-sm border border-stone-200 bg-white p-6">
         <h3 className="mb-4 font-serif text-xl font-bold text-stone-900">SEO</h3>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">SEO Title</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">SEO Title (tiêu đề hiển thị trên Google và tab trình duyệt)</span>
             <input name="seoTitle" defaultValue={initial.seoTitle} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label>
-            <span className="mb-2 block text-sm font-bold text-stone-700">Cover Alt</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">Cover Alt (mô tả ảnh đại diện cho SEO và accessibility)</span>
             <input name="coverAlt" defaultValue={initial.coverAlt} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <label className="md:col-span-2">
-            <span className="mb-2 block text-sm font-bold text-stone-700">SEO Description</span>
+            <span className="mb-2 block text-sm font-bold text-stone-700">SEO Description (đoạn mô tả ngắn hiển thị trên kết quả tìm kiếm)</span>
             <textarea name="seoDescription" defaultValue={initial.seoDescription} rows={3} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
           </label>
           <div className="md:col-span-2">
-            <span className="mb-2 block text-sm font-bold text-stone-700">Cover Image</span>
-            <div className="flex flex-col gap-3 md:flex-row">
-              <input value={coverImage} onChange={(event) => setCoverImage(event.target.value)} className="w-full rounded-sm border border-stone-300 px-4 py-3" />
+            <span className="mb-2 block text-sm font-bold text-stone-700">Cover Image (ảnh đại diện của bài viết)</span>
+            <div className="flex flex-col gap-3">
               <input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadCover(event.target.files[0]).catch(() => undefined)} className="rounded-sm border border-stone-300 px-4 py-3 text-sm" />
+              {coverImage ? <p className="text-xs font-medium text-stone-500">Current file: {coverImage}</p> : null}
             </div>
+            {coverPreview ? (
+              <div className="mt-4 max-w-sm overflow-hidden rounded-sm border border-stone-200 bg-stone-50">
+                <img src={coverPreview} alt="Cover preview" className="aspect-video w-full object-cover" />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
 
-      <div className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="rounded-sm border border-stone-200 bg-white p-6">
         <h3 className="mb-2 font-serif text-xl font-bold text-stone-900">Content Editor</h3>
         <p className="mb-4 text-sm text-stone-500">
-          Write and format the public SEO HTML. Images uploaded here are committed to GitHub immediately.
+          Content Editor (nội dung chính của bài viết, có thể chèn ảnh, căn lề và định dạng chữ).
         </p>
         <RichPostEditor
           name="html"

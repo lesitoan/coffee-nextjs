@@ -8,20 +8,20 @@ type AdminDashboardScreenProps = {
 
 export function AdminDashboardScreen({ posts, categories }: AdminDashboardScreenProps) {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div className="space-y-0">
+      <div className="grid grid-cols-1 md:grid-cols-3">
         {[
           ["Posts", posts.length],
           ["Published", posts.filter((post) => post.status === "published").length],
           ["Categories", categories.filter((category) => category.id !== "all").length]
         ].map(([label, value]) => (
-          <div key={label} className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+          <div key={label} className="rounded-sm border border-stone-200 bg-white p-6">
             <p className="text-sm font-semibold text-stone-500">{label}</p>
             <p className="mt-2 font-serif text-4xl font-bold text-coffee-700">{value}</p>
           </div>
         ))}
       </div>
-      <div className="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="rounded-sm border border-stone-200 bg-white p-6">
         <h2 className="mb-4 font-serif text-2xl font-bold text-stone-900">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <Link href="/admin/posts/new" className="rounded-sm bg-coffee-700 px-5 py-3 text-sm font-bold text-white transition hover:bg-coffee-800">
