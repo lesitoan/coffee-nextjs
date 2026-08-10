@@ -23,5 +23,16 @@
     "id": "events",
     "label": "News & Events",
     "icon": "fa-solid fa-newspaper"
+  },
+  {
+    "id": "demo",
+    "slug": "demo",
+    "label": "demo",
+    "icon": "fa-solid fa-newspaper",
+    "description": "heheheheh",
+    "seoTitle": "hehehehe",
+    "seoDescription": "heheheheheheh",
+    "order": 1,
+    "status": "active"
   }
 ]
